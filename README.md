@@ -1,9 +1,43 @@
 # Optimized AES-256 implementation
-- 
+This AES-256 library is developed to function without reliance on external resources, utilizing proprietary code for all mathematical operations. Tailored adjustments enable its seamless integration into BareMetal systems without hardware acceleration or dynamic variables. The implementation prioritizes efficiency by minimizing function calls, optimizing looping assembly overheads, and choosing between lookup tables and mathematical functions. Thorough testing against FIPS-197 test vectors ensures compliance and accuracy.
 
+**Usage Instructions:**
 
+To utilize the AES-256 encryption and decryption functions , follow these simple steps:
 
+1. **Include Header File:**
+   ```c
+   #include "encryption.h"
+   ```
+   or:
+   ```c
+   #include "decryption.h"
+   ```
+   
+3. **Encryption:**
+   - Use the `encrypt` function to encrypt plaintext using a 256-bit key.
+   - Pass the plaintext (`plain_text`) and the 256-bit key (`key`) as arguments.
+   - Ensure that the plaintext is in a 16-byte array format and the key is in a 32-byte array format.
+   
+   Example:
+   ```c
+   BYTE plain_text[16] = { /* fill with plaintext */ };
+   BYTE key[32] = { /* fill with key */ };
+   encrypt(plain_text, key);
+   ```
 
+4. **Decryption:**
+   - Use the `decrypt` function to decrypt ciphertext encrypted with AES-256.
+   - Pass the ciphertext (`cipher_text`) and the 256-bit key (`key`) as arguments.
+   - Ensure that the ciphertext is in a 16-byte array format and the key is in a 32-byte array format.
+   
+   Example:
+   ```c
+   BYTE cipher_text[16] = { /* fill with ciphertext */ };
+   BYTE key[32] = { /* fill with key */ };
+   decrypt(cipher_text, key);
+   ```
+To compile the library just use the command "make"
 
 ## Motivation
 
@@ -19,8 +53,6 @@ I embarked on this project driven by several key factors:
 
 4. **NIST Certification**: Over 80% of encryption products certified by the National Institute of Standards and Technology (NIST) for government use integrate AES. Its widespread acceptance in security protocols underscores its reliability and trustworthiness.
 
-5. **Intuitive Calling**: Intuitive instructions encouraged me to undertake this project, serving as a compelling motivation to contribute to the realm of cryptography.
-
 6. **Transparency and Open Development**: AES represents one of the pioneering openly developed cryptographic algorithms, embodying principles of transparency and collaborative development.
 
 7. **Acknowledgment by NSA**: The adoption of AES by the National Security Agency (NSA) further underscores its robustness and reliability. Encrypted data disseminated by the NSA, viewable on platforms like WikiLeaks, serves as a testament to its real-world application and efficacy.
@@ -29,7 +61,11 @@ I embarked on this project driven by several key factors:
 
 In 1997, the National Institute of Standards and Technology (NIST) initiated an open, administered process to assess and define a new Advanced Encryption Standard (AES). This call resulted in a staggering 15 submissions in 1998.
 
-The AES candidate submissions were required to meet several mandatory criteria, including a 128-bit block cipher, support for key lengths of 128, 192, and 256 bits, efficiency in both software and hardware, and relative security.
+The following requirements for all AES candidate submissions were mandatory:
+- 128 bit block cipher
+- three key legths to be supported: 128, 192 and 256 bit
+- efficiency in software and hardware
+- relative security 
 
 On August 9, 1999, NIST announced the selection of five finalist algorithms:
 - Mars by IBM Corporation
@@ -66,9 +102,25 @@ Unlike Feistel networks, which operate on half-blocks, AES encrypts entire block
 
 - **Diffusion Layer**: The diffusion layer facilitates dispersion of data across all state bits, crucial for preventing patterns from emerging in the ciphertext. This layer includes sublayers such as ShiftRows and MixColumn, performing linear operations to ensure comprehensive diffusion.
 
-### Finite Fields (Galois Fields)
+### Finite Fields AKA Galois Fields (the G of GCM)
 
 Finite fields, also known as Galois fields, play a pivotal role in AES, particularly in the S-Box and the diffusion layer. Finite fields are sets with a finite number of elements where arithmetic operations like addition, subtraction, multiplication, and inversion are defined. These fields exhibit properties of groups and fields, ensuring the requisite mathematical properties for secure encryption. Finite fields are foundational to AES, contributing to its resilience against various cryptographic attacks.
+
+#### Group
+Is a set with one operation and the corresponding inverse operation. It has this following properties:
+1. The group operation ◦ is closed. That is, for all a,b,∈ G, it holds that a ◦ b = c ∈ G.
+2. The group operation is associative. That is, a◦(b◦c) (a◦b)◦c for all a,b,c ∈ G.
+3. There is an element 1 ∈ G, called the neutral element (or identity element), such that a ◦ 1 = 1 ◦ a = a for all a ∈ G.
+4. For each a ∈ G there exists an element a−1 ∈ G, called the inverse of a, such that a ◦ a−1 = a−1 ◦ a = 1.
+5. A group G is abelian (or commutative) if, furthermore, a ◦ b = b ◦ a for all a,b ∈ G.
+
+#### Field
+A field F is a set of elements with the following properties:
+1. All elements of F form an additive group with the group operation “+” and the neutral element 0.
+2. All elements of F except 0 form a multiplicative group with the group operation “×” and the neutral element 1.
+3. When the two group operations are mixed, the distributivity law holds, i.e., for all a,b,c ∈ F: a(b+c)=(ab)+(ac)
+
+A finite field is just a field with a finite number of elements.😲
 
 ### Cardinality Importance
 
@@ -92,7 +144,7 @@ Extension Fields, denoted as \( GF(p^m) \), emerge from Galois Fields raised to 
 
 **Multiplication:** Multiplication in \( GF(2^8) \) underpins the MixColumn operation. It necessitates irreducible polynomials, akin to prime numbers, to minimize factors. The core steps involve plain polynomial product calculation followed by modulo reduction using the irreducible polynomial.
 
-**Inversion:** In \( GF(2^8) \), inversion is central to the Byte Substitution transformation in AES. The inverse of a nonzero element \( A \) in \( GF(2^m) \) is computed using the Extended Euclidean Algorithm.
+**Inversion:** In \( GF(2^8) \), inversion is central to the Byte Substitution transformation in AES. The inverse of a nonzero element \( A \) in \( GF(2^m) \) is computed using the [Extended Euclidean Algorithm](https://www.youtube.com/watch?v=qqvtGGKQTLI&list=PLKXdxQAT3tCssgaWOy5vKXAR4WTPpRVYK&index=24).
 
 S-Box Pre computed Inverse Lookup Table
 X/Y  0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F
@@ -112,14 +164,14 @@ C   0B 28 2F A3 DA D4 E4 0F A9 27 53 04 1B FC AC E6
 D   7A 07 AE 63 C5 DB E2 EA 94 8B C4 D5 9D F8 90 6B
 E   B1 0D D6 EB C6 0E CF AD 08 4E D7 E3 5D 50 1E B3
 F   5B 23 38 34 68 46 03 8C DD 9C 7D A0 CD 1A 41 1C
-
+The S-box is composed of this plus a step called affine mapping.
 
 ### Internal Structure of AES
 
 At a high level, AES operates on a 16-byte input plaintext and a key of 128, 192, or 256 bits to produce an output. The number of rounds varies based on the key length: 128-bit key requires 10 rounds, 192-bit key requires 12 rounds, and 256-bit key requires 14 rounds. Unlike a Feistel network, AES encrypts all 128 bits in a single round, introducing the concept of key whitening by adding a subkey at the start and end of each round.
 
 
-#### The AES Round
+#### The AES Encryption Round
 Each AES round (except the last) consists of four layers and starts with 16 bytes of input [16 elements of G(2⁸)]:
 1.  This is fed byte-wise into 16 S-Boxes (Byte Substitution Layer) [Inversion] - Confusion
 2.  The output from the substitution boxes is permuted byte-wise in the ShiftRows [Permutation] - Diffusion
@@ -162,13 +214,11 @@ F   8C A1 89 0D BF E6 42 68 41 99 2D 0F B0 54 BB 16
 
 This inversion lookup table was computed based on the Extended Field inversion and then the affine mapping of each input element of GF(2⁸). The affine mapping is done in order to destroy all the structured mathematical properties.
 
-Using inversion in GF(28) as the central function of the Byte Substitution layer offers a notable benefit: it yields a significant level of nonlinearity. This nonlinearity, in turn, furnishes optimal defense against some of the most analytical attacks known. The subsequent affine step effectively disrupts the algebraic structure inherent in the Galois field, a crucial measure for thwarting potential attacks aiming to exploit the finite field inversion.
-
 #### Diffusion Layer
 
 The Diffusion Layer spreads the influence of individual bits across the entire state linearly:
-- **Shift Rows**: Rotates bytes within each row of the state matrix, contributing to permutation.
-- **Mix Column**: Executes a matrix operation in \( GF(2^8) \) on each column of the state matrix, promoting diffusion.
+- **Shift Rows**: Rotates bytes within each row of the state matrix, contributing to permutation. [Permute]
+- **Mix Column**: Executes a matrix operation in \( GF(2^8) \) on each column of the state matrix, promoting diffusion. [Galois Field Matrix Multiplication]
 
 #### Key Addition Layer
 
@@ -180,17 +230,15 @@ To incorporate a subkey in each round, the AES algorithm generates \( Nr + 1 \) 
 
 This inversion lookup table was computed based on the Extended Field inversion and then the affine mapping of each input element of GF(2⁸). The affine mapping is done in order to destroy all the structured mathematical properties.
 
-Using inversion in GF(28) as the central function of the Byte Substitution layer offers a notable benefit: it yields a significant level of nonlinearity. This nonlinearity, in turn, furnishes optimal defense against some of the most analytical attacks known. The subsequent affine step effectively disrupts the algebraic structure inherent in the Galois field, a crucial measure for thwarting potential attacks aiming to exploit the finite field inversion.This structure enables for the [key whitening](https://crypto.stackexchange.com/questions/18497/how-exactly-does-key-whitening-manage-to-increase-security) of this block cypher.
-
 
 #### Decryption
 Just do the same, but in the inverse direction. (See the comments on the code to get to know more)
 
 ## Lessons Learned:
 * While in this project I almost implemented lookup tables for the multiplication:
-> This was the wrong approach because it takes more space and the multiplication in the GF(2⁸) is really simple and based on shifts and xors (not computationally heavy as memory access)
+> This was the wrong approach because it takes more space and the multiplication in the GF(2⁸) is really simple and based on shifts and xors (not as computationally heavy as memory access)
 * AES is really simple:
 > optimizing is really tricky
-> coding is very fun 🙂
+> optimizing math code is very fun 🙂
 
 
