@@ -17,8 +17,8 @@ $(BUILD_DIR)/key.o: $(SRC_DIR)/key.c
 $(BUILD_DIR)/decryption.o: $(SRC_DIR)/decryption.c
 	$(CC) -o $(BUILD_DIR)/decryption.o -c $(SRC_DIR)/decryption.c $(CFLAGS)
 
-$(BUILD_DIR)/sample.o: sample.c
-	$(CC) -o $(BUILD_DIR)/sample.o -c sample.c $(CFLAGS)
+$(BUILD_DIR)/sample.o: samples/aes256.c
+	$(CC) -o $(BUILD_DIR)/sample.o -c samples/aes256.c $(CFLAGS)
 
 clean:
 	rm -f bin/aes256 $(BUILD_DIR)/*.o *.o
