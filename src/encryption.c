@@ -35,7 +35,7 @@ void encrypt(BYTE plain[16], BYTE key[32]){
     ((WORD*)plain)[2] = extended_key[2] ^ (WORD)((WORD*)plain)[2];
     ((WORD*)plain)[3] = extended_key[3] ^ (WORD)((WORD*)plain)[3];
     
-    for(BYTE round = 1; round<15; round++)
+    for(BYTE round = 1;; round++)
     {
         /*  
             [Byte Substitution Layer]
@@ -75,11 +75,16 @@ void encrypt(BYTE plain[16], BYTE key[32]){
                 [Last Round]
                 :: When in the last round, we do not compute the mix column
             */
-            ((WORD*)diffused_matrix)[0] = (WORD)((WORD*)state_matrix)[0];
-            ((WORD*)diffused_matrix)[1] = (WORD)((WORD*)state_matrix)[1];
-            ((WORD*)diffused_matrix)[2] = (WORD)((WORD*)state_matrix)[2];
-            ((WORD*)diffused_matrix)[3] = (WORD)((WORD*)state_matrix)[3]; 
-            goto key_addition;
+            /*
+                [Key Addition Layer]
+                :: simple XOR with the generated extended subkey
+            */
+            key_index = (round<<2);
+            ((WORD*)plain)[0] = extended_key[key_index+0] ^ (WORD)((WORD*)state_matrix)[0];
+            ((WORD*)plain)[1] = extended_key[key_index+1] ^ (WORD)((WORD*)state_matrix)[1];
+            ((WORD*)plain)[2] = extended_key[key_index+2] ^ (WORD)((WORD*)state_matrix)[2];
+            ((WORD*)plain)[3] = extended_key[key_index+3] ^ (WORD)((WORD*)state_matrix)[3]; 
+            break;
         }
         /*
             [Mix Column]
@@ -184,7 +189,6 @@ void encrypt(BYTE plain[16], BYTE key[32]){
                             state_matrix[13] ^
                             state_matrix[14] ^
                             gf_mult_0x02(state_matrix[15]);
-key_addition:
         /*
             [Key Addition Layer]
             :: simple XOR with the generated extended subkey
