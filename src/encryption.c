@@ -5,7 +5,8 @@
     [GF(2⁸) Multiplication by 3]
     :: as 0x03 equals to the polynomial x+1, the multiplication is just a shift left opperation and an addition of the polynomial that takes the mod x⁸+x⁴+x³+x+1 when the result polinomial is of degree higher than 7
 */
-BYTE gf_mult_0x03(BYTE a) {  /* 3 = 2 + 1 */
+BYTE gf_mult_0x03(BYTE a) 
+{  /* 3 = 2 + 1 */
     return gf_mult_0x02(a) ^ a;
 }
 
@@ -16,7 +17,10 @@ BYTE gf_mult_0x03(BYTE a) {  /* 3 = 2 + 1 */
     > plain will be turned into the cipher text
     @param key :: 32 bytes (256bit) aes key to be extended and used in the algorithm
 */
-void encrypt(BYTE plain[16], BYTE key[32]){
+void encrypt(
+    BYTE plain[16], 
+    BYTE key[32])
+{
 
     WORD extended_key[60];
     key_expansion((WORD *)key, extended_key);

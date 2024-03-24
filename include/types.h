@@ -13,7 +13,8 @@ typedef struct {
 #define MOST_SIGNIFICANT_NIBBLE(x) ((x)>>4)
 #define LEAST_SIGNIFICANT_NIBBLE(x) ((x)&0xF)
 
-inline BYTE gf_mult_0x02(BYTE x) {
+inline BYTE gf_mult_0x02(BYTE x) 
+{
     /*
         [Multiplication by 2]
         :: mutltiplication by two in GF(2⁸) is fairly simple

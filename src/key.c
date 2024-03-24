@@ -44,7 +44,9 @@ static const BYTE round_constant[7] = {
     * the final word is always used in order to generate the next
     * we always use a non-linear function in order to enable for the key whithening
 */
-void key_expansion(WORD key[8], WORD extended_key[60]){
+void key_expansion(
+    WORD key[8], 
+    WORD extended_key[60]){
     
     extended_key[0]= key[0];
     extended_key[1]= key[1];

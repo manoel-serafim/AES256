@@ -31,16 +31,20 @@ const BYTE coherence_matrix[16][16] = {
     :: Is done this way to evade possible timing attacks
     :: will be used in the inverse diffusion
 */
-static inline BYTE gf_mult_0x09(BYTE a) {  /* 9 = 8 + 1 */
+static inline BYTE gf_mult_0x09(BYTE a) 
+{  /* 9 = 8 + 1 */
     return gf_mult_0x02(gf_mult_0x02(gf_mult_0x02(a))) ^ a;
 }
-static inline BYTE gf_mult_0x0B(BYTE a) {  /* 11 = 8 + 2 + 1 */
+static inline BYTE gf_mult_0x0B(BYTE a) 
+{  /* 11 = 8 + 2 + 1 */
     return gf_mult_0x02(gf_mult_0x02(gf_mult_0x02(a))) ^ gf_mult_0x02(a) ^ a;
 }
-static inline BYTE gf_mult_0x0D(BYTE a) {  /* 13 = 8 + 4 + 1 */
+static inline BYTE gf_mult_0x0D(BYTE a) 
+{  /* 13 = 8 + 4 + 1 */
     return gf_mult_0x02(gf_mult_0x02(gf_mult_0x02(a))) ^ gf_mult_0x02(gf_mult_0x02(a)) ^ a;
 }
-static inline BYTE gf_mult_0x0E(BYTE a) {  /* 14 = 8 + 4 + 2 */
+static inline BYTE gf_mult_0x0E(BYTE a) 
+{  /* 14 = 8 + 4 + 2 */
     return gf_mult_0x02(gf_mult_0x02(gf_mult_0x02(a))) ^ gf_mult_0x02(gf_mult_0x02(a)) ^ gf_mult_0x02(a);
 }
 
@@ -49,7 +53,10 @@ static inline BYTE gf_mult_0x0E(BYTE a) {  /* 14 = 8 + 4 + 2 */
     :: AES is not based on a Feistel network, this means all layers must actually be inverted
 
 */
-void decrypt(BYTE cipher[16], BYTE key[32]){
+void decrypt(
+    BYTE cipher[16], 
+    BYTE key[32])
+{
 
     WORD extended_key[60];
     key_expansion((WORD *)key, extended_key);
