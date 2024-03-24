@@ -65,10 +65,10 @@ void decrypt(BYTE cipher[16], BYTE key[32]){
             [Key Addition(Subtraction) Layer]
             :: Continues the same as the invert of XOR is the XOR
         */
-        ((WORD*)cipher)[0] = extended_key[key_index+0] ^ (WORD)((WORD*)cipher)[0];
-        ((WORD*)cipher)[1] = extended_key[key_index+1] ^ (WORD)((WORD*)cipher)[1];
-        ((WORD*)cipher)[2] = extended_key[key_index+2] ^ (WORD)((WORD*)cipher)[2];
-        ((WORD*)cipher)[3] = extended_key[key_index+3] ^ (WORD)((WORD*)cipher)[3];
+        ((WORD*)cipher)[0] ^= extended_key[key_index+0];
+        ((WORD*)cipher)[1] ^= extended_key[key_index+1];
+        ((WORD*)cipher)[2] ^= extended_key[key_index+2];
+        ((WORD*)cipher)[3] ^= extended_key[key_index+3];
         
         if( round != 14)
         {
@@ -226,9 +226,9 @@ void decrypt(BYTE cipher[16], BYTE key[32]){
             [Key Addition Layer]
             :: simple XOR with the generated extended subkey
     */
-    ((WORD*)cipher)[0] = extended_key[0] ^ (WORD)((WORD*)cipher)[0];
-    ((WORD*)cipher)[1] = extended_key[1] ^ (WORD)((WORD*)cipher)[1];
-    ((WORD*)cipher)[2] = extended_key[2] ^ (WORD)((WORD*)cipher)[2];
-    ((WORD*)cipher)[3] = extended_key[3] ^ (WORD)((WORD*)cipher)[3]; 
+    ((WORD*)cipher)[0] ^= extended_key[0];
+    ((WORD*)cipher)[1] ^= extended_key[1];
+    ((WORD*)cipher)[2] ^= extended_key[2];
+    ((WORD*)cipher)[3] ^= extended_key[3]; 
 
 }
