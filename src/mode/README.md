@@ -27,3 +27,5 @@ Decryption (general block): xi = e^(-1)_k (yi ⊕ yi−1), i ≥ 2
 Encryption: yi = ek(IV||CTRi)⊕xi, i ≥ 1
 Decryption: xi = ek(IV||CTRi)⊕yi, i ≥ 1
 ```
+
+## GCM
