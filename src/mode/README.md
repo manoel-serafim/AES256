@@ -15,10 +15,15 @@ The IV need not be secret; however, for the CBC and CFB modes, the IV for any pa
 ## CBC
 The Cipher Block Chaining (CBC) mode represents an enhancement over the Electronic CodeBook (ECB) mode, primarily through the introduction of an initialization vector (IV) which serves to randomize the encryption process, thereby mitigating the effectiveness of statistical analysis on encrypted blocks. Despite the introduction of randomized variability by the CBC mode, it does not inherently guarantee data integrity. Consequently, random bit flips within the encrypted data stream can lead to unpredictable and unauthorized behavior.
 
-
 ```
 Encryption (first block): y1 = ek(x1 ⊕ IV)
 Encryption (general block): yi = ek(xi ⊕ yi−1), i ≥ 2
 Decryption (first block): x1 = e^(-1)_k (y1 ⊕ IV)
 Decryption (general block): xi = e^(-1)_k (yi ⊕ yi−1), i ≥ 2
+```
+
+## CTR
+```
+Encryption: yi = ek(IV||CTRi)⊕xi, i ≥ 1
+Decryption: xi = ek(IV||CTRi)⊕yi, i ≥ 1
 ```
