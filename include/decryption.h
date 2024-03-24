@@ -4,5 +4,4 @@
 #include "types.h"
 void decrypt(BYTE cipher[16], BYTE key[32]);
 
-
 #endif //_AES_DECRYPTION_ROUND_H_
