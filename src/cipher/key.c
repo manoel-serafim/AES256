@@ -1,4 +1,4 @@
-#include "key.h"
+#include "cipher/key.h"
 
 /*
     [Byte Substitution Lookup Table] 

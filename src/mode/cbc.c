@@ -5,7 +5,9 @@
 
 /*
     [Cipher Block Chaining Mode]
+    @param  key: 256 bit key
     @param  length :: length in bytes 
+    @param  block :: 
 */
 
 void cbc_encrypt(

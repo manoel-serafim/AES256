@@ -1,5 +1,5 @@
-#include "decryption.h"
-#include "key.h"
+#include "cipher/decryption.h"
+#include "cipher/key.h"
 
 /*
     [Byte Inverse Substitution Lookup Table]
@@ -89,10 +89,10 @@ void decrypt(
                     static const BYTE control_matrix[4][4] = 
                     { 
                       
-                        0E 0B 0D 09
-                        09 0E 0B 0D
-                        0D 09 0E 0B
-                        0B 0D 09 0E
+                        0x0E 0x0B 0x0D 0x09
+                        0x09 0x0E 0x0B 0x0D
+                        0x0D 0x09 0x0E 0x0B
+                        0x0B 0x0D 0x09 0x0E
                     };
 
                 > to reduce looping assembly overhead, the definitions will be made from byte-to-byte
