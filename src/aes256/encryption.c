@@ -1,5 +1,5 @@
-#include "cipher/encryption.h"
-#include "cipher/key.h"
+#include "aes256/encryption.h"
+#include "aes256/key.h"
 
 /*
     [GF(2⁸) Multiplication by 3]

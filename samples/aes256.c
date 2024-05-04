@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "cipher/encryption.h"
-#include "cipher/decryption.h"
+#include "aes256/encryption.h"
+#include "aes256/decryption.h"
 
 void print_help() {
     printf("Usage: aes256 -e|-d <var> <key>\n");

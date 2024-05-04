@@ -1,5 +1,5 @@
-#include "cipher/decryption.h"
-#include "cipher/key.h"
+#include "aes256/decryption.h"
+#include "aes256/key.h"
 
 /*
     [Byte Inverse Substitution Lookup Table]

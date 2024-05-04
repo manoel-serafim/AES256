@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -O4 -I include
-SRC_DIR = src/cipher
+SRC_DIR = src/aes256
 BUILD_DIR = build
 
 all: aes256
